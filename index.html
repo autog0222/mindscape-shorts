@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindScape - XR Visual Therapy [v1.8]</title>
+    <title>MindScape - XR Visual Therapy [v1.9]</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -264,27 +264,27 @@
                 </div>
             </div>
 
-            <!-- [VERSION 1.8] Counselor Profiles: Absolute Positioning Update -->
+            <!-- [VERSION 1.9] Counselor Profiles: 4 Column Grid & Serene Added -->
             <div class="story-text pos-3">
-                <div class="glass-panel max-w-6xl w-full">
+                <div class="glass-panel max-w-7xl w-full">
                     <h3 class="text-4xl font-bold mb-8">나만의 AI 상담사</h3>
-                    <div class="grid md:grid-cols-3 gap-6 text-left">
+                    <!-- Grid changed to 4 columns to reduce card width -->
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
                         <!-- Card 1: Aura -->
                         <div class="relative h-[320px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-white/10">
                             <img id="img-counselor-aura" src="" alt="Dr. Aura" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                             
-                            <!-- Badges (Top) -->
+                            <!-- Badges -->
                             <div class="absolute top-0 left-0 p-6 flex gap-2">
                                 <span class="px-2 py-1 bg-teal-500/80 backdrop-blur-md rounded-md text-[10px] font-bold uppercase">Basic</span>
                                 <span class="px-2 py-1 bg-purple-500/80 backdrop-blur-md rounded-md text-[10px] font-bold uppercase">Empathy</span>
                             </div>
 
-                            <!-- Text Content (Bottom Aligned with Expansion) -->
+                            <!-- Text Content -->
                             <div class="absolute bottom-0 left-0 w-full p-6 text-white transition-all duration-300">
                                 <h4 class="text-2xl font-bold mb-1">Dr. Aura</h4>
                                 <p class="text-purple-300 text-sm font-bold mb-0 uppercase">따뜻한 공감과 위로</p>
-                                <!-- Hidden Description expands on hover -->
                                 <div class="max-h-0 overflow-hidden opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-500 ease-in-out">
                                     <p class="text-gray-300 text-sm leading-relaxed pt-2">
                                         "당신의 모든 감정은 소중합니다.<br>마음 깊은 곳의 이야기를 들어드릴게요."
@@ -298,12 +298,10 @@
                             <img id="img-counselor-theo" src="" alt="Prof. Theo" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                             
-                            <!-- Badges -->
                             <div class="absolute top-0 left-0 p-6 flex gap-2">
                                 <span class="px-2 py-1 bg-blue-500/80 backdrop-blur-md rounded-md text-[10px] font-bold uppercase">Logic</span>
                             </div>
 
-                            <!-- Text Content -->
                             <div class="absolute bottom-0 left-0 w-full p-6 text-white transition-all duration-300">
                                 <h4 class="text-2xl font-bold mb-1">Prof. Theo</h4>
                                 <p class="text-blue-300 text-sm font-bold mb-0 uppercase">냉철한 분석과 해결</p>
@@ -315,17 +313,35 @@
                             </div>
                         </div>
 
-                        <!-- Card 3: Custom -->
+                        <!-- Card 3: Serene (Added back from original code) -->
+                        <div class="relative h-[320px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-white/10">
+                            <img id="img-counselor-serene" src="" alt="Guide Serene" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                            
+                            <div class="absolute top-0 left-0 p-6 flex gap-2">
+                                <span class="px-2 py-1 bg-emerald-500/80 backdrop-blur-md rounded-md text-[10px] font-bold uppercase">Meditation</span>
+                            </div>
+
+                            <div class="absolute bottom-0 left-0 w-full p-6 text-white transition-all duration-300">
+                                <h4 class="text-2xl font-bold mb-1">Guide Serene</h4>
+                                <p class="text-emerald-300 text-sm font-bold mb-0 uppercase">마인드풀니스 가이드</p>
+                                <div class="max-h-0 overflow-hidden opacity-0 group-hover:max-h-24 group-hover:opacity-100 transition-all duration-500 ease-in-out">
+                                    <p class="text-gray-300 text-sm leading-relaxed pt-2">
+                                        "깊게 숨을 들이마시세요.<br>지금 이 순간, 당신은 온전히 안전합니다."
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Custom -->
                         <div class="relative h-[320px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-white/10">
                             <img id="img-counselor-custom" src="" alt="Custom" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                             
-                            <!-- Badges -->
                             <div class="absolute top-0 left-0 p-6 flex gap-2">
                                 <span class="px-2 py-1 bg-orange-500/80 backdrop-blur-md rounded-md text-[10px] font-bold uppercase">Create</span>
                             </div>
 
-                            <!-- Text Content -->
                             <div class="absolute bottom-0 left-0 w-full p-6 text-white transition-all duration-300">
                                 <h4 class="text-2xl font-bold mb-1">Custom Persona</h4>
                                 <p class="text-orange-300 text-sm font-bold mb-0 uppercase">나만의 상담사 생성</p>
@@ -343,7 +359,8 @@
     </section>
 
     <!-- === PART 3: INTERACTIVE XR EXPERIENCE === -->
-    <section id="xr-experience" class="bg-gradient-to-b from-[#f0fdfa] to-[#f0fdfa] py-40 px-6 relative z-20 border-t border-white/5 scroll-mt-0">
+    <!-- [VERSION 1.9] Padding Increased to py-64 -->
+    <section id="xr-experience" class="bg-gradient-to-b from-[#f0fdfa] to-[#f0fdfa] py-64 px-6 relative z-20 border-t border-white/5 scroll-mt-0">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
                 <span class="px-3 py-1 rounded-full bg-teal-500/20 text-teal-600 text-xs font-bold uppercase mb-3 inline-block border border-teal-500/30">Interactive Demo</span>
@@ -485,6 +502,7 @@
                 counselors: {
                     aura: 'aura.png',
                     theo: 'theo.png',
+                    serene: 'serene.png',
                     custom: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop'
                 }
             }
@@ -511,12 +529,15 @@
             if(demoBg1) demoBg1.style.backgroundImage = `url('${siteConfig.images.bg1}')`;
             if(demoBg2) demoBg2.style.backgroundImage = `url('${siteConfig.images.bg2}')`;
 
-            // [VERSION 1.5] Load Counselor Images
+            // [VERSION 1.9] Load Counselor Images (Updated)
             const auraImg = document.getElementById('img-counselor-aura');
             if(auraImg) auraImg.src = siteConfig.images.counselors.aura;
 
             const theoImg = document.getElementById('img-counselor-theo');
             if(theoImg) theoImg.src = siteConfig.images.counselors.theo;
+
+            const sereneImg = document.getElementById('img-counselor-serene');
+            if(sereneImg) sereneImg.src = siteConfig.images.counselors.serene;
 
             const customImg = document.getElementById('img-counselor-custom');
             if(customImg) customImg.src = siteConfig.images.counselors.custom;
@@ -740,4 +761,3 @@
     </script>
 </body>
 </html>
-
