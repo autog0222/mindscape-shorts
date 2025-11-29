@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindScape - XR Visual Therapy [v1.9]</title>
+    <title>MindScape - XR Visual Therapy [v2.4]</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -108,12 +108,30 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
+        /* Imported Styles for Pricing Cards */
         .glass-panel {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
             padding: 2rem;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            transition: all 0.5s ease;
+        }
+        .pricing-card {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(209, 213, 219, 0.5);
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(45, 212, 191, 0.15);
+            border-color: rgba(45, 212, 191, 0.6);
         }
 
         /* --- XR Viewport Styles --- */
@@ -124,6 +142,22 @@
             background: #000;
             transform-style: preserve-3d; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+        }
+
+        /* [VERSION 2.4] Bio-Feedback Toast Style Update */
+        #bio-feedback-toast {
+            /* Initially hidden and slightly lower */
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            /* Visuals */
+            box-shadow: 0 0 20px rgba(45, 212, 191, 0.2); 
+            /* Positioning relative to parent widget */
+            z-index: 60;
+        }
+        #bio-feedback-toast.show {
+            opacity: 1;
+            transform: translateY(0); /* Move to normal position */
         }
 
         /* Scroll Hint */
@@ -142,25 +176,6 @@
         .pricing-card-light:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        /* Imported Styles for Pricing Cards */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.7); 
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 24px;
-            transition: all 0.5s ease;
-        }
-        .pricing-card {
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.6);
-            border: 1px solid rgba(209, 213, 219, 0.5);
-        }
-        .pricing-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(45, 212, 191, 0.15);
-            border-color: rgba(45, 212, 191, 0.6);
         }
     </style>
 </head>
@@ -264,24 +279,21 @@
                 </div>
             </div>
 
-            <!-- [VERSION 1.9] Counselor Profiles: 4 Column Grid & Serene Added -->
+            <!-- Counselor Profiles -->
             <div class="story-text pos-3">
                 <div class="glass-panel max-w-7xl w-full">
                     <h3 class="text-4xl font-bold mb-8">나만의 AI 상담사</h3>
-                    <!-- Grid changed to 4 columns to reduce card width -->
                     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
                         <!-- Card 1: Aura -->
                         <div class="relative h-[320px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-white/10">
                             <img id="img-counselor-aura" src="" alt="Dr. Aura" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
                             
-                            <!-- Badges -->
                             <div class="absolute top-0 left-0 p-6 flex gap-2">
                                 <span class="px-2 py-1 bg-teal-500/80 backdrop-blur-md rounded-md text-[10px] font-bold uppercase">Basic</span>
                                 <span class="px-2 py-1 bg-purple-500/80 backdrop-blur-md rounded-md text-[10px] font-bold uppercase">Empathy</span>
                             </div>
 
-                            <!-- Text Content -->
                             <div class="absolute bottom-0 left-0 w-full p-6 text-white transition-all duration-300">
                                 <h4 class="text-2xl font-bold mb-1">Dr. Aura</h4>
                                 <p class="text-purple-300 text-sm font-bold mb-0 uppercase">따뜻한 공감과 위로</p>
@@ -313,7 +325,7 @@
                             </div>
                         </div>
 
-                        <!-- Card 3: Serene (Added back from original code) -->
+                        <!-- Card 3: Serene -->
                         <div class="relative h-[320px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-white/10">
                             <img id="img-counselor-serene" src="" alt="Guide Serene" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
@@ -359,7 +371,6 @@
     </section>
 
     <!-- === PART 3: INTERACTIVE XR EXPERIENCE === -->
-    <!-- [VERSION 1.9] Padding Increased to py-64 -->
     <section id="xr-experience" class="bg-gradient-to-b from-[#f0fdfa] to-[#f0fdfa] py-64 px-6 relative z-20 border-t border-white/5 scroll-mt-0">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
@@ -381,22 +392,38 @@
                     <!-- HUD Interface -->
                     <div id="hud-layer" class="absolute inset-0 z-30 p-8 flex flex-col justify-between opacity-0 transition-opacity duration-1000 pointer-events-none">
                         <!-- Top Bar -->
-                        <div class="flex justify-between items-start opacity-90">
+                        <div class="flex justify-between items-start opacity-90 relative">
                             <div class="flex gap-6">
                                 <div class="flex flex-col">
                                     <span class="text-[10px] text-teal-400 font-future tracking-widest mb-1">REC ●</span>
                                     <span id="hud-time" class="text-xl text-white font-mono font-light">00:00:00</span>
                                 </div>
                                 <div class="h-10 w-[1px] bg-white/20"></div>
-                                <div class="flex flex-col">
+                                
+                                <!-- [VERSION 2.4] Bio-Sync Widget & Toast Container -->
+                                <div id="bio-sync-widget" class="flex flex-col relative">
                                     <span class="text-[10px] text-gray-400 font-future tracking-widest mb-1">BIO-SYNC</span>
                                     <div class="flex items-center gap-2">
                                         <i data-lucide="heart" class="w-4 h-4 text-red-500 fill-red-500 animate-pulse"></i>
                                         <span id="hud-bpm" class="text-sm text-white font-mono">108 BPM</span>
                                     </div>
+
+                                    <!-- [VERSION 2.4] Bio-Feedback Toast (Placed Inside Widget for perfect alignment) -->
+                                    <div id="bio-feedback-toast" class="absolute top-full left-0 mt-3 bg-black/60 backdrop-blur-xl border border-teal-400/60 p-4 rounded-xl w-max max-w-xs z-50 text-left origin-top-left">
+                                        <div class="flex items-start gap-3">
+                                            <div class="bg-teal-500/20 p-2 rounded-full text-teal-400 shrink-0"><i data-lucide="zap" class="w-4 h-4"></i></div>
+                                            <div>
+                                                <h5 class="text-sm font-bold text-teal-300 mb-1 font-future tracking-wider">Visual Bio-Feedback</h5>
+                                                <p class="text-[11px] text-gray-100 leading-relaxed font-light">
+                                                    단순히 시각적인 배경을 바라보는 것만으로도<br><strong>뇌는 더 빠른 안정</strong>을 찾습니다.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex gap-3">
+
+                            <div class="flex gap-3 ml-auto">
                                  <div class="bg-white/10 backdrop-blur px-3 py-1 rounded-full border border-white/20 flex items-center gap-2">
                                     <div class="w-2 h-2 bg-teal-400 rounded-full"></div>
                                     <span class="text-xs text-white font-future">MindScape Active</span>
@@ -520,6 +547,8 @@
         const hudBpm = document.getElementById('hud-bpm');
         const xrSection = document.getElementById('xr-experience');
         const nav = document.getElementById('main-nav');
+        const bioWidget = document.getElementById('bio-sync-widget'); 
+        const bioToast = document.getElementById('bio-feedback-toast');
 
         // --- Safe Initialization ---
         (function init() {
@@ -529,7 +558,7 @@
             if(demoBg1) demoBg1.style.backgroundImage = `url('${siteConfig.images.bg1}')`;
             if(demoBg2) demoBg2.style.backgroundImage = `url('${siteConfig.images.bg2}')`;
 
-            // [VERSION 1.9] Load Counselor Images (Updated)
+            // Load Counselor Images
             const auraImg = document.getElementById('img-counselor-aura');
             if(auraImg) auraImg.src = siteConfig.images.counselors.aura;
 
@@ -560,20 +589,19 @@
 
             document.querySelectorAll('.story-text').forEach((el) => observer.observe(el));
 
-            // [VERSION 1.1] Start Logic for Scroll Locking & Delay
+            // Start Logic for Scroll Locking & Delay
             let hasStarted = false;
 
             // XR Experience Observer
             const simObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    // 1. 섹션이 60% 이상 보이고 아직 시작 안 했으면
                     if (entry.isIntersecting && !hasStarted) {
                         hasStarted = true;
                         
-                        // [VERSION 1.1] Step A: 강제 스크롤 이동 및 잠금
+                        // Lock Scroll
                         lockScrollAtSection();
 
-                        // [VERSION 1.1] Step B: 2.5초 (2500ms) 대기 후 시뮬레이션 시작
+                        // 2.5s Delay before start
                         setTimeout(() => {
                             if(hudLayer) hudLayer.style.opacity = '1'; 
                             startSimulationFlow();
@@ -585,65 +613,56 @@
             if(xrSection) simObserver.observe(xrSection);
         })();
 
-        // [VERSION 1.1 & 1.3] Helper Function: Lock Scroll
+        // Helper Function: Lock Scroll
         function lockScrollAtSection() {
-            // [VERSION 1.3] 자동 스크롤 중이었다면 상태 저장
             if(isScrolling) {
                 wasAutoScrolling = true;
-                toggleAutoScroll(); // Stop it for now to lock properly
+                toggleAutoScroll();
             }
 
-            // 부드럽게 해당 섹션으로 이동
             if(xrSection) {
                 xrSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
 
-            // 이동 애니메이션 시간을 고려해 약간 뒤에 body overflow hidden 처리
             setTimeout(() => {
                 document.body.classList.add('scroll-locked');
-                if(nav) nav.classList.add('-translate-y-full'); // Nav 숨김
+                if(nav) nav.classList.add('-translate-y-full');
             }, 500);
         }
 
-        // [VERSION 1.1 & 1.3] Helper Function: Unlock Scroll
+        // Helper Function: Unlock Scroll
         function unlockScroll() {
             document.body.classList.remove('scroll-locked');
-            if(nav) nav.classList.remove('-translate-y-full'); // Nav 표시
+            if(nav) nav.classList.remove('-translate-y-full');
             
-            // [VERSION 1.3] 자동 스크롤로 왔던 경우, 시연 종료 후 다시 스크롤 재개
             if(wasAutoScrolling) {
                 wasAutoScrolling = false;
                 setTimeout(() => {
-                    // 사용자 경험을 위해 잠시 대기 후 출발
                     toggleAutoScroll();
                 }, 800);
             }
             console.log("Scroll Unlocked");
         }
 
-        // --- Auto View Logic (Modified for Cursor Hiding & Resume) ---
+        // --- Auto View Logic ---
         let scrollInterval;
         let isScrolling = false;
-        let wasAutoScrolling = false; // [VERSION 1.3] State to remember if auto scroll was active
+        let wasAutoScrolling = false; 
 
         window.toggleAutoScroll = function() {
             const btnText = document.getElementById('scroll-btn-text');
             const html = document.documentElement;
             
             if (isScrolling) {
-                // Stop manually
                 cancelAnimationFrame(scrollInterval);
                 isScrolling = false;
                 if(btnText) btnText.innerText = '▼ Auto View';
                 html.style.scrollBehavior = 'smooth';
-                // [VERSION 1.3] Restore cursor
                 document.body.style.cursor = 'default'; 
             } else {
-                // Start
                 isScrolling = true;
                 if(btnText) btnText.innerText = '❚❚ Stop Auto';
                 html.style.scrollBehavior = 'auto'; 
-                // [VERSION 1.3] Hide cursor
                 document.body.style.cursor = 'none';
                 
                 function step() {
@@ -655,7 +674,6 @@
                         isScrolling = false;
                         if(btnText) btnText.innerText = '▼ Auto View';
                         html.style.scrollBehavior = 'smooth';
-                        // [VERSION 1.3] Restore cursor at bottom
                         document.body.style.cursor = 'default';
                         return;
                     }
@@ -675,7 +693,6 @@
             { text: "AI Counselor: 그렇다면 잠시 복잡한 생각을 멈출 수 있는 곳으로 가보는 건 어떨까요?", type: "avatar", delay: 13000 },
             { text: "AI Counselor: 당신을 위해 평화로운 '비 갠 뒤의 숲'을 준비했습니다.", type: "avatar", delay: 17000 },
             
-            // Transition Trigger
             { text: "Environment shifting...", type: "system", delay: 20000 },
             
             { text: "AI Counselor: 공간이 바뀌었습니다. 싱그러운 숲 냄새가 느껴지시나요?", type: "avatar", delay: 24000 },
@@ -685,7 +702,6 @@
             { text: "AI Counselor: 지금 당신은 충분히 잘하고 있어요. 잠시 멈춰도 괜찮습니다.", type: "avatar", delay: 41000 },
             { text: "User: 고마워. 마음이 한결 가벼워진 것 같아.", type: "user", delay: 46000 },
             { text: "AI Counselor: 언제든 마음이 무거울 때 다시 찾아와 주세요. 편안한 밤 되세요.", type: "avatar", delay: 50000 },
-             // [VERSION 1.1] 시뮬레이션 종료 시 스크롤 잠금 해제 트리거
              { text: "Session Ending...", type: "system", delay: 54000 }
         ];
 
@@ -710,6 +726,7 @@
 
         let clockInterval, bpmInterval;
         let currentBpm = 118, targetBpm = 118; // Start High
+        let isStabilizing = false;
 
         function startClock() {
             if(clockInterval) clearInterval(clockInterval);
@@ -732,6 +749,12 @@
                 if(currentBpm > 130) currentBpm = 130;
                 if(currentBpm < 60) currentBpm = 60;
                 if(hudBpm) hudBpm.innerText = `${Math.round(currentBpm)} BPM`;
+
+                // [VERSION 2.4] Check for End of Stabilization (Goal reached: 80 BPM)
+                if(isStabilizing && currentBpm <= 80) {
+                    if(bioToast) bioToast.classList.remove('show'); // Hide when relaxed
+                    isStabilizing = false;
+                }
             }, 800);
         }
 
@@ -748,11 +771,14 @@
                             if(demoBg2) demoBg2.style.opacity = "1"; 
                             if(bgOverlay) { bgOverlay.classList.remove('from-black/60'); bgOverlay.classList.add('from-black/30'); }
                             targetBpm = 72;
+                            
+                            // [VERSION 2.3] Start Stabilization Phase -> Show Toast
+                            isStabilizing = true;
+                            if(bioToast) bioToast.classList.add('show');
                         }, 2000);
                     }
                     if(line.text.includes("Session Ending")) {
                         if(hudLayer) hudLayer.style.opacity = '0';
-                        // [VERSION 1.1] 시뮬레이션 끝난 후 잠금 해제 호출
                         setTimeout(() => { unlockScroll(); }, 1000); 
                     }
                 }, line.delay);
