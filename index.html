@@ -281,9 +281,11 @@
 
             <!-- Counselor Profiles -->
             <div class="story-text pos-3">
-                <div class="glass-panel max-w-7xl w-full">
+                <!-- max-w-4xl로 줄여서 2열 배치시 카드가 너무 넓어지지 않게 조정 -->
+                <div class="glass-panel max-w-4xl w-full">
                     <h3 class="text-4xl font-bold mb-8">나만의 AI 상담사</h3>
-                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 text-left">
+                    <!-- md:grid-cols-2 로 고정하여 2명씩 2줄 배치 -->
+                    <div class="grid md:grid-cols-2 gap-6 text-left">
                         <!-- Card 1: Aura -->
                         <div class="relative h-[320px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-white/10">
                             <img id="img-counselor-aura" src="" alt="Dr. Aura" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
