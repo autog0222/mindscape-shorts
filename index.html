@@ -31,6 +31,7 @@
         body.scroll-locked {
             overflow: hidden !important;
             height: 100vh;
+            touch-action: none; /* 모바일 터치 방지 */
         }
 
         .font-future { font-family: 'Orbitron', sans-serif; }
@@ -99,6 +100,7 @@
             transform: translateY(0);
         }
 
+        /* 기본 위치 (가로 모니터) */
         .pos-1 { top: 30vh; }
         .pos-2 { top: 110vh; }
         .pos-3 { top: 190vh; }
@@ -146,18 +148,15 @@
 
         /* [VERSION 2.4] Bio-Feedback Toast Style Update */
         #bio-feedback-toast {
-            /* Initially hidden and slightly lower */
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-            /* Visuals */
             box-shadow: 0 0 20px rgba(45, 212, 191, 0.2); 
-            /* Positioning relative to parent widget */
             z-index: 60;
         }
         #bio-feedback-toast.show {
             opacity: 1;
-            transform: translateY(0); /* Move to normal position */
+            transform: translateY(0);
         }
 
         /* Scroll Hint */
@@ -172,10 +171,34 @@
             60% {transform: translateX(-50%) translateY(-5px);}
         }
 
-        /* Pricing Card Hover Effect for Light Theme */
         .pricing-card-light:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* === [Vertical Monitor Optimization] === */
+        /* 화면이 가로보다 세로가 더 긴 경우 (피벗 모니터) */
+        @media (orientation: portrait) {
+            .cinematic-section {
+                height: 180vh; /* 세로가 길므로 스크롤 길이 축소 */
+            }
+            /* 텍스트 간격 좁힘 */
+            .pos-1 { top: 25vh; }
+            .pos-2 { top: 75vh; }
+            .pos-3 { top: 125vh; }
+            
+            /* 글자가 너무 커서 줄바꿈이 어색하지 않도록 조정 */
+            .story-text h2 {
+                font-size: 3rem !important; /* text-5xl ~ 6xl 사이 */
+                line-height: 1.3;
+            }
+            .story-text p {
+                font-size: 1.1rem !important;
+                max-width: 80%;
+            }
+            
+            /* 섹션별 여백 조정 */
+            #solution { height: 220vh !important; } /* 솔루션 섹션 높이 조정 */
         }
     </style>
 </head>
@@ -281,10 +304,9 @@
 
             <!-- Counselor Profiles -->
             <div class="story-text pos-3">
-                <!-- max-w-4xl로 줄여서 2열 배치시 카드가 너무 넓어지지 않게 조정 -->
                 <div class="glass-panel max-w-4xl w-full">
                     <h3 class="text-4xl font-bold mb-8">나만의 AI 상담사</h3>
-                    <!-- md:grid-cols-2 로 고정하여 2명씩 2줄 배치 -->
+                    <!-- md:grid-cols-2 유지: 세로 모니터에서도 2열은 안정적으로 보임 -->
                     <div class="grid md:grid-cols-2 gap-6 text-left">
                         <!-- Card 1: Aura -->
                         <div class="relative h-[320px] rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-white/10">
@@ -591,12 +613,16 @@
 
             document.querySelectorAll('.story-text').forEach((el) => observer.observe(el));
 
+            // [NEW] Init Story Snapping Logic
+            initStorySnapping();
+
             // Start Logic for Scroll Locking & Delay
             let hasStarted = false;
 
             // XR Experience Observer
             const simObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
+                    // [수정] threshold를 0.5로 변경하여 조금 더 일찍, 자연스럽게 감지 시작
                     if (entry.isIntersecting && !hasStarted) {
                         hasStarted = true;
                         
@@ -610,26 +636,57 @@
                         }, 2500);
                     }
                 });
-            }, { threshold: 0.6 });
+            }, { threshold: 0.5 }); // [변경] 0.6 -> 0.5
 
             if(xrSection) simObserver.observe(xrSection);
         })();
+
+        // [NEW] Story Snapping Function (Manual Scroll Helper)
+        function initStorySnapping() {
+            const storyPoints = document.querySelectorAll('.story-text');
+            
+            const snapObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // Check if intersecting AND not already viewed
+                    if (entry.isIntersecting && !entry.target.classList.contains('snap-viewed')) {
+                        const el = entry.target;
+                        
+                        // Mark as viewed immediately to prevent double locking
+                        el.classList.add('snap-viewed');
+
+                        // Only snap if manual scrolling (not auto scrolling)
+                        if (!isScrolling) {
+                            // Smooth scroll element to center
+                            // el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                });
+            }, { 
+                threshold: 0.5, 
+                rootMargin: "-10% 0px -10% 0px"
+            });
+
+            storyPoints.forEach(pt => snapObserver.observe(pt));
+        }
 
         // Helper Function: Lock Scroll
         function lockScrollAtSection() {
             if(isScrolling) {
                 wasAutoScrolling = true;
-                toggleAutoScroll();
+                toggleAutoScroll(); // Stop auto scroll for XR demo
             }
 
             if(xrSection) {
+                // 부드러운 감속을 위해 scrollIntoView 실행
                 xrSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
 
+            // [수정] 500ms -> 1000ms로 변경
+            // 스크롤이 완전히 멈춘 뒤에 잠금을 걸어야 '툭' 끊기는 느낌이 사라짐
             setTimeout(() => {
                 document.body.classList.add('scroll-locked');
                 if(nav) nav.classList.add('-translate-y-full');
-            }, 500);
+            }, 1000);
         }
 
         // Helper Function: Unlock Scroll
@@ -637,6 +694,7 @@
             document.body.classList.remove('scroll-locked');
             if(nav) nav.classList.remove('-translate-y-full');
             
+            // Resume auto scroll if it was active
             if(wasAutoScrolling) {
                 wasAutoScrolling = false;
                 setTimeout(() => {
@@ -646,37 +704,109 @@
             console.log("Scroll Unlocked");
         }
 
-        // --- Auto View Logic ---
+        // --- Cinematic Auto Scroll Logic (Variable Speed) ---
         let scrollInterval;
         let isScrolling = false;
-        let wasAutoScrolling = false; 
+        let isPaused = false;
+        let wasAutoScrolling = false;
+        let visitedTargets = new Set();
+        
+        // Physics variables
+        let currentScrollSpeed = 0;
+        const MAX_SPEED = 12; // Maximum travel speed (px/frame)
+        const MIN_SPEED = 1;  // Crawl speed just before stopping
+        const BRAKING_DISTANCE = 450; // Distance to start slowing down (px)
 
         window.toggleAutoScroll = function() {
             const btnText = document.getElementById('scroll-btn-text');
             const html = document.documentElement;
             
             if (isScrolling) {
+                // STOP
                 cancelAnimationFrame(scrollInterval);
                 isScrolling = false;
+                isPaused = false;
+                currentScrollSpeed = 0;
                 if(btnText) btnText.innerText = '▼ Auto View';
                 html.style.scrollBehavior = 'smooth';
-                document.body.style.cursor = 'default'; 
+                document.body.style.cursor = 'default';
+                
+                if (!wasAutoScrolling) visitedTargets.clear();
             } else {
+                // START
                 isScrolling = true;
                 if(btnText) btnText.innerText = '❚❚ Stop Auto';
                 html.style.scrollBehavior = 'auto'; 
                 document.body.style.cursor = 'none';
                 
+                // Targets to stop at
+                const targets = document.querySelectorAll('.story-text, .pricing-card');
+                
                 function step() {
                     if (!isScrolling) return;
-                    
-                    window.scrollBy({ top: 2, left: 0, behavior: "auto" });
-                    
+
+                    if (!isPaused) {
+                        const viewportCenter = window.innerHeight / 2;
+                        let activeTarget = null;
+                        let closestDistance = Infinity; // Distance to next target
+
+                        // 1. Find the next relevant target
+                        for (const target of targets) {
+                            if (visitedTargets.has(target)) continue;
+
+                            const rect = target.getBoundingClientRect();
+                            const targetCenter = rect.top + (rect.height / 2);
+                            const dist = targetCenter - viewportCenter;
+
+                            // We only care about targets that are below or extremely close to center
+                            // 'dist > -20' allows catching items slightly passed
+                            if (dist > -20 && dist < closestDistance) {
+                                closestDistance = dist;
+                                activeTarget = target;
+                            }
+                        }
+
+                        // 2. Calculate Target Speed based on distance
+                        let targetSpeed = MAX_SPEED;
+
+                        if (activeTarget) {
+                            if (closestDistance < BRAKING_DISTANCE) {
+                                // Braking Logic: Interpolate speed based on distance
+                                // As we get closer (distance -> 0), speed -> MIN_SPEED
+                                const ratio = closestDistance / BRAKING_DISTANCE;
+                                targetSpeed = MIN_SPEED + (ratio * (MAX_SPEED - MIN_SPEED));
+                            }
+
+                            // Stop Logic
+                            if (closestDistance < 10) { // Sweet spot
+                                isPaused = true;
+                                visitedTargets.add(activeTarget);
+                                currentScrollSpeed = 0;
+
+                                // Custom pause duration
+                                const duration = activeTarget.classList.contains('story-text') ? 2200 : 1800;
+                                setTimeout(() => { isPaused = false; }, duration);
+                                
+                                // Pause loop for this frame
+                                return requestAnimationFrame(step); 
+                            }
+                        }
+
+                        // 3. Apply Smooth Acceleration/Deceleration (Easing)
+                        // This makes the speed change feel natural rather than instant
+                        currentScrollSpeed += (targetSpeed - currentScrollSpeed) * 0.05; 
+
+                        // 4. Move
+                        window.scrollBy(0, currentScrollSpeed);
+                    }
+
+                    // Check for bottom of page
                     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
                         isScrolling = false;
                         if(btnText) btnText.innerText = '▼ Auto View';
                         html.style.scrollBehavior = 'smooth';
                         document.body.style.cursor = 'default';
+                        visitedTargets.clear();
                         return;
                     }
                     
