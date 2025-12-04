@@ -818,23 +818,18 @@
         };
 
         // --- Extended Dialogue Scenario ---
+        // [수정] 전체 시나리오를 30초 분량으로 단축 (기존 54초)
         const dialogues = [
-            { text: "User: 요즘 회사 일이 너무 많아서 숨이 막히는 것 같아요. 번아웃이 온 것 같아...", type: "user", delay: 1000 },
-            { text: "AI Counselor: 많이 힘드시겠어요. 숨 쉴 틈 없이 달려오느라 마음이 지치신 것 같네요.", type: "avatar", delay: 5000 },
-            { text: "User: 맞아. 집에 와도 쉰 것 같지가 않고 계속 불안해.", type: "user", delay: 9000 },
-            { text: "AI Counselor: 그렇다면 잠시 복잡한 생각을 멈출 수 있는 곳으로 가보는 건 어떨까요?", type: "avatar", delay: 13000 },
-            { text: "AI Counselor: 당신을 위해 평화로운 '비 갠 뒤의 숲'을 준비했습니다.", type: "avatar", delay: 17000 },
+            { text: "User: 일이 너무 많아서 숨이 막혀. 번아웃인가 봐...", type: "user", delay: 1000 },
+            { text: "AI Counselor: 많이 지치셨군요. 잠시 복잡한 생각을 멈추고 숲으로 떠나볼까요?", type: "avatar", delay: 5000 },
             
-            { text: "Environment shifting...", type: "system", delay: 20000 },
+            { text: "Environment shifting...", type: "system", delay: 9000 }, // 배경 전환 시작
             
-            { text: "AI Counselor: 공간이 바뀌었습니다. 싱그러운 숲 냄새가 느껴지시나요?", type: "avatar", delay: 24000 },
-            { text: "AI Counselor: 저와 함께 깊게 호흡해봐요. 숨을 들이마시고... 내쉬고...", type: "avatar", delay: 28000 },
-            { text: "User: (깊은 한숨) 하아... 공기가 맑아진 느낌이야.", type: "user", delay: 33000 },
-            { text: "AI Counselor: 잘하셨어요. 이곳에서는 어떤 업무 알림도 울리지 않아요.", type: "avatar", delay: 37000 },
-            { text: "AI Counselor: 지금 당신은 충분히 잘하고 있어요. 잠시 멈춰도 괜찮습니다.", type: "avatar", delay: 41000 },
-            { text: "User: 고마워. 마음이 한결 가벼워진 것 같아.", type: "user", delay: 46000 },
-            { text: "AI Counselor: 언제든 마음이 무거울 때 다시 찾아와 주세요. 편안한 밤 되세요.", type: "avatar", delay: 50000 },
-             { text: "Session Ending...", type: "system", delay: 54000 }
+            { text: "AI Counselor: 싱그러운 숲 내음이 느껴지시나요? 깊게 들이마시고... 내쉬고...", type: "avatar", delay: 13000 },
+            { text: "User: (깊은 한숨) 하아... 꽉 막혔던 가슴이 뚫리는 기분이야.", type: "user", delay: 20000 },
+            { text: "AI Counselor: 잘하셨어요. 지금은 오직 당신만을 위한 시간입니다. 편안히 쉬세요.", type: "avatar", delay: 25000 },
+            
+            { text: "Session Ending...", type: "system", delay: 30000 } // 30초에 종료
         ];
 
         function updateCaption(text, type) {
